@@ -11,9 +11,9 @@ namespace tinycrm
 
             Console.WriteLine(InputProductList.AddPricestoProducts());
             Console.WriteLine(InputProductList.ReadInput(path));
-            var newmal = new Order("dasjdosj");
+            
             //newmal.OrderId = "jeih"; WRONG
-            Console.WriteLine(newmal.OrderId);
+            //Console.WriteLine(newmal.OrderId);
             //var n = new List<string>();
             //Console.WriteLine(n.Count == 0);
         }

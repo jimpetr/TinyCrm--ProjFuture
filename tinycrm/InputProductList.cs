@@ -17,26 +17,26 @@ namespace tinycrm
         public static int ReadInput(string path)
         {
             var reader = new StreamReader(path);
-            var listA = new List<String>();
-            var listB = new List<String>();
-            var listC = new List<String>();
+            var ProductIdList = new List<String>();
+            var NameList = new List<String>();
+            var DescriptionList = new List<String>();
 
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
                 var values = line.Split(';');
 
-                listA.Add(values[0]);
-                listB.Add(values[1]);
-                listC.Add(values[2]);
+                ProductIdList.Add(values[0]);
+                NameList.Add(values[1]);
+                DescriptionList.Add(values[2]);
             }
 
-            listA.RemoveAt(0);
-            listB.RemoveAt(0);
-            listC.RemoveAt(0);
+            ProductIdList.RemoveAt(0);
+            NameList.RemoveAt(0);
+            DescriptionList.RemoveAt(0);
 
             var dict = new Dictionary<string, decimal>();
-            foreach (var i in listA.Distinct())
+            foreach (var i in ProductIdList.Distinct())
             {
                 dict.Add(i, AddPricestoProducts());
             }
@@ -47,23 +47,23 @@ namespace tinycrm
             //Console.WriteLine($"total has un {listA.Count()}");
 
             //save duplicates
-            var duplicatedlist = Duplicates(listA);
+            var duplicatedlist = Duplicates(ProductIdList);
             //print if there are duplicates duplicates
             DuplicatesExist(duplicatedlist);
             //print  duplicates 
             foreach (string str in duplicatedlist)
             {
                 int counter = 0;
-                var positions = check(str, listA);
+                var positions = check(str, ProductIdList);
                 foreach (int i in positions)
                 {
 
-                    Console.WriteLine($"Product id, {listA[i]}-- name, {listB[i]}-- description, {listC[i]}");
+                    Console.WriteLine($"Product id, {ProductIdList[i]}-- name, {NameList[i]}-- description, {DescriptionList[i]}");
                     if (counter > 0)
                     {
-                        listA.RemoveAt(i);
-                        listB.RemoveAt(i);
-                        listC.RemoveAt(i);
+                        ProductIdList.RemoveAt(i);
+                        NameList.RemoveAt(i);
+                        DescriptionList.RemoveAt(i);
                     }
                     counter++;
                 }
@@ -71,11 +71,11 @@ namespace tinycrm
 
             var ListOfProducts = new List<Product>();
 
-            for (int i = 0; i < listC.Count; i++)
+            for (int i = 0; i < DescriptionList.Count; i++)
             {
-                ListOfProducts.Add(new Product(listA[i], listB[i], listC[i], AddPricestoProducts()));
+                ListOfProducts.Add(new Product(ProductIdList[i], NameList[i], DescriptionList[i], AddPricestoProducts()));
             }
-            return listC.Count;
+            return DescriptionList.Count;
         }
 
         public static List<string> Duplicates(List<string> list)
