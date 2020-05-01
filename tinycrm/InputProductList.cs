@@ -11,7 +11,8 @@ namespace tinycrm
         public static decimal AddPricestoProducts()
         {
             var rnd = new Random();
-            return (decimal)rnd.NextDouble() * 10M;
+            //Math.Round(rnd.Next
+            return (decimal)Math.Round(rnd.NextDouble(),2) * 10M;
         }
 
         public static int ReadInput(string path)
