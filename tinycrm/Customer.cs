@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace tinycrm
@@ -13,19 +14,26 @@ namespace tinycrm
         public string Email { get; set; }
         public string VatNumber { get; private set; }
         public string Phone { get; set; }
-        public decimal TotalGross { get; private set; }
+        private decimal _TotalGross;
         public bool IsActive { get; set; }
         public int Age { get; set; }
 
-        public Customer(string vatNumber)
-        {
-            if (!IsValidVatNumber(vatNumber))
-            {
-                throw new Exception("Invalid VatNumber");
-            }
+        public List<Order> ListOfOrders=new List<Order>() ;
 
-            VatNumber = vatNumber;
-            Created = DateTime.Now;
+        //public Customer(string vatNumber)
+        //{
+        //   if (!IsValidVatNumber(vatNumber))
+        //  {
+        //      throw new Exception("Invalid VatNumber");
+        // }
+
+        //  VatNumber = vatNumber;
+        // Created = DateTime.Now;
+        //}
+
+        public decimal TotalGross
+        {
+            get { return _TotalGross = ListOfOrders.Select(x => x.TotalAmount).Sum(); }
         }
 
         public bool IsValidVatNumber(string vatNumber)
