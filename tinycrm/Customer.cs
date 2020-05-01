@@ -6,39 +6,38 @@ namespace tinycrm
 {
     public class Customer
     {
+        public string CustomerId { get; set; }
+        public DateTime Created { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public string Email { get; set; }
         public string VatNumber { get; private set; }
         public string Phone { get; set; }
-        public decimal TotalGross { get; set; }
-        public string Email { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public bool isActive { get; set; }
+        public decimal TotalGross { get; private set; }
+        public bool IsActive { get; set; }
+        public int Age { get; set; }
 
-        public DateTime Created { get; set; }
-
-        public Customer(string vatnumber)
+        public Customer(string vatNumber)
         {
-            if (!IsValidVatNumber(vatnumber))
+            if (!IsValidVatNumber(vatNumber))
             {
                 throw new Exception("Invalid VatNumber");
             }
 
-            VatNumber = vatnumber;
+            VatNumber = vatNumber;
             Created = DateTime.Now;
         }
 
-        public bool IsValidVatNumber(string vatnumber)
+        public bool IsValidVatNumber(string vatNumber)
         {
-            return vatnumber.Length != 9 && !string.IsNullOrWhiteSpace(vatnumber);
+            return
+                !string.IsNullOrWhiteSpace(vatNumber) &&
+                vatNumber.Length == 9;
         }
 
-        public bool IsValidEmail()
+        public bool IsAdult()
         {
-            if (Email.Contains('@') && (Email.EndsWith(".com") || Email.EndsWith(".gr")))
-            {
-                return true;
-            }
-            return false;
+            return Age >= 18;
         }
     }
 }
