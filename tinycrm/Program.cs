@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 
@@ -8,9 +9,26 @@ namespace tinycrm
 {
     class Program
     {
+
         static void Main(string[] args)
         {
-            string[] productsFromFile;//saves the lines of the csv
+            //var tinycrmdbcontext = new TinyCrmDbContext();
+
+            //var customer = new Customer()
+           // {
+             //   Firstname = "Geroge",
+               // Lastname = "Oikonomou",
+                //Email = "goikonomou@gmail.com"
+            //};
+
+            //tinycrmdbcontext.Add(customer);
+            //tinycrmdbcontext.SaveChanges();
+
+            //var customerlist =tinycrmdbcontext.Set<Customer>().ToList();
+        }
+    }
+    
+}            /*string[] productsFromFile;//saves the lines of the csv
 
             try
             {
@@ -92,12 +110,12 @@ namespace tinycrm
             Order2.Products = order2;
 
             var totalorders = order1.Union(order2).ToList();
-            FiveMostSoldProducts(totalorders);
+            //FiveMostSoldProducts(totalorders);
 
 
             (cust1.ListOfOrders).Add(Order1);
             (cust2.ListOfOrders).Add(Order2);
-            foreach(var i in cust2.ListOfOrders)
+            foreach (var i in cust2.ListOfOrders)
             {
                 Console.WriteLine(i);
             }
@@ -110,60 +128,42 @@ namespace tinycrm
             ListOfCustomers.Add(cust2);
             FindMostValuableCustomer(ListOfCustomers);
             Console.WriteLine(cust1.TotalGross);
+            */
+//Added new code for migrations
 
-            test();
-        }
 
-        public static decimal GetRandomPrice()
-        {
-            var random = new Random();
-            var randomNumber = random.NextDouble() * 100;
-            var roundedNumber = Math.Round(randomNumber, 2);
 
-            return (decimal)roundedNumber;
-        }
+// test();
 
-        public static void FindMostValuableCustomer(List<Customer> list)
-        {
-            
-            var templist = list.Select(x => x.TotalGross).ToList();
-            Console.WriteLine($"The most valuable customer(MVC) is customer number {templist.IndexOf(templist.Max())+1}");
-        }
 
-        public static void FiveMostSoldProducts(List<Product> list)
-        {
-            var most = list.GroupBy(i => i.ProductId)
-                           .OrderByDescending(grp => grp.Count())
-                           .Select(grp => grp.Key)
-                           .Take(5);
+//public static decimal GetRandomPrice()
+//{
+//   var random = new Random();
+//  var randomNumber = random.NextDouble() * 100;
+//  var roundedNumber = Math.Round(randomNumber, 2);
 
-            foreach (var item in most)
-            {
-                Console.WriteLine(item);
-            }
+//return (decimal)roundedNumber;
+//}
 
-        }
+//public static void FindMostValuableCustomer(List<Customer> list)
+//{
 
-        public static void test()
-        {
+//  var templist = list.Select(x => x.TotalGross).ToList();
+//Console.WriteLine($"The most valuable customer(MVC) is customer number {templist.IndexOf(templist.Max())+1}");
+//}
 
-            int[] grades = { 59, 82, 70, 56, 92, 98,92, 85 };
+//public static void FiveMostSoldProducts(List<Product> list)
+//{
+//  var most = list.GroupBy(i => i.ProductId)
+//           .OrderByDescending(grp => grp.Count())
+//             .Select(grp => grp.Key)
+//               .Take(5);
 
-            var topThreeGrades =
-                grades.GroupBy(i=>i).OrderByDescending(grp => grp.Count()).Select(grp => grp.Key).Take(3);
+// foreach (var item in most)
+//{
+// Console.WriteLine(item);
+//}
 
-            Console.WriteLine("The top three grades are:");
-            foreach (var grade in topThreeGrades)
-            {
-                Console.WriteLine(grade);
-                /*
-                 output
-                 92
-                 59
-                 82
-                 */
-            }
+// }
 
-        }
-    }
-}
+
