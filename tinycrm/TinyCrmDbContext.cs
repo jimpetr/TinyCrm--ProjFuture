@@ -9,7 +9,7 @@ namespace tinycrm
     {
         private readonly string connectionString =
             "Server =localhost; " +
-            "Database =crm; " +
+            "Database =crm--test; " +
             "User Id =sa; " +
             "Password =admin!@#123;";
 
@@ -27,6 +27,9 @@ namespace tinycrm
                 .Entity<Customer>()
                 .ToTable("Customer");
 
+            modelBuilder
+                .Entity<Product>()
+                .ToTable("Product");
         }
     }
 }

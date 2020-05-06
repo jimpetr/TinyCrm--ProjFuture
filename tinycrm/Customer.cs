@@ -14,11 +14,12 @@ namespace tinycrm
         public string Email { get; set; }
         public string VatNumber { get; private set; }
         public string Phone { get; set; }
+
         private decimal _TotalGross;
         public bool IsActive { get; set; }
         public int Age { get; set; }
 
-        public List<Order> ListOfOrders=new List<Order>() ;
+        //public List<Order> ListOfOrders=new List<Order>() ;
 
         //public Customer(string vatNumber)
         //{
@@ -31,10 +32,10 @@ namespace tinycrm
         // Created = DateTime.Now;
         //}
 
-        public decimal TotalGross
-        {
-            get { return _TotalGross = ListOfOrders.Select(x => x.TotalAmount).Sum(); }
-        }
+        //public decimal TotalGross
+        //{
+         //   get { return _TotalGross = ListOfOrders.Select(x => x.TotalAmount).Sum(); }
+        //}
 
         public bool IsValidVatNumber(string vatNumber)
         {
