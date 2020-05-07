@@ -10,13 +10,14 @@ namespace tinycrm
         public string Description { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
+        public string ProductCategory { get; set; }
 
         //public Product(string ProductId, string Description, string Name, decimal Price)
         //{
-          //  this.ProductId = ProductId;
-           // this.Description = Description;
-            //this.Name = Name;
-            //this.Price = Price;
+        //  this.ProductId = ProductId;
+        // this.Description = Description;
+        //this.Name = Name;
+        //this.Price = Price;
         //}
     }
    

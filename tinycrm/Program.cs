@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-
+using System.Reflection;
 
 namespace tinycrm
 {
@@ -12,23 +13,183 @@ namespace tinycrm
 
         static void Main(string[] args)
         {
-            //var tinycrmdbcontext = new TinyCrmDbContext();
+            var tinycrmdbcontext = new TinyCrmDbContext();
+
+            string[] productsFromFile;//saves the lines of the csv
+            try
+            {
+                productsFromFile = File.ReadAllLines("products.txt");
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            if (productsFromFile.Length == 0)
+            {
+                return;
+            }
+
+            var productsArray = new Product[productsFromFile.Length];
+            var TotalProducts = new List<Product>();
+
+            for (var i = 0; i < productsFromFile.Length; i++)
+            {
+                var isDuplicate = false;
+                var values = productsFromFile[i].Split(';');
+
+                foreach (var p in productsArray)
+                {
+                    if (p != null && p.ProductId.Equals(values[0]))
+                    {
+                        isDuplicate = true;
+                    }
+                }
+
+                if (!isDuplicate)
+                {
+                    var product = new Product()
+                    {
+                        ProductId = values[0],
+                        Name = values[1],
+                        Description = values[2],
+                        Price = AddPricestoProducts()
+                    };
+
+                    productsArray[i] = product;
+
+                }
+            }
+
+            foreach (var p in productsArray)
+            {
+                if (p != null)
+                {
+                    //Console.WriteLine($"{p.ProductId} {p.Name} {p.Price}");  
+                    TotalProducts.Add(p);
+                }
+            }
+
+            foreach(var p in TotalProducts)
+            {
+                Console.WriteLine($"Id: {p.ProductId} ,Name: {p.Name} ,Price: {p.Price}");
+                //tinycrmdbcontext.Add(p);
+            }
+            //tinycrmdbcontext.SaveChanges();
 
             //var customer = new Customer()
-           // {
-             //   Firstname = "Geroge",
-               // Lastname = "Oikonomou",
-                //Email = "goikonomou@gmail.com"
+            //{
+            //    FirstName = "Geroge",
+            //    LastName = "Oikonomou",
+            //    Email = "goikonomou@gmail.com",
+            //    Created = DateTime.Now
+
             //};
 
             //tinycrmdbcontext.Add(customer);
+
+            //var customer1 = new Customer()
+            //{
+            //    FirstName = "Xaris",
+            //    LastName = "Mpouras",
+            //    Email = "mpouras.gr",
+            //    Created = DateTime.Now
+            //};
+
+            //tinycrmdbcontext.Add(customer1);
+
+            //var petrogiannos = new Customer()
+            //{
+            //    FirstName = "Dimitris",
+            //    LastName = "Petrogiannos",
+            //    Email = "petrogiannos.gr",
+            //    Created = DateTime.Now
+            //};
+
+            //tinycrmdbcontext.Add(petrogiannos);
             //tinycrmdbcontext.SaveChanges();
 
-            //var customerlist =tinycrmdbcontext.Set<Customer>().ToList();
+            var customerlist = tinycrmdbcontext.Set<Customer>();
+            var productlist = tinycrmdbcontext.Set<Product>();
+
+            var searchcustomeroptions = new SearchCustomerOptions()
+            {
+                FirstName="Xaris"
+            };
+
+            Console.WriteLine(searchcustomeroptions.CreatedTo == default(DateTime));//True
+
+            var list=SearchCustomers(customerlist, searchcustomeroptions);
+            foreach (var i in list)
+            {
+                Console.WriteLine(i.LastName);
+            }
+
+            var searchproductoptions = new SearchProductsOptions()
+            { 
+                PriceTo=8
+            };
+            var list1 = SearchProducts(productlist, searchproductoptions);
+            foreach (var i in list1)
+            {
+                Console.WriteLine(i.Price);
+            }
+        }
+
+        public static List<Customer> SearchCustomers(DbSet<Customer> dbset,SearchCustomerOptions options)
+        {
+            var res = dbset.Where(s=>s==s);
+
+            if (!(options.FirstName == default(string)))
+            {  res = res.Where(s => s.FirstName == options.FirstName); }
+
+            if (!(options.LastName == default(string)))
+            {  res = res.Where(s => s.LastName == options.LastName); }
+
+            if (!(options.VatNumber == default(string)))
+            {  res = res.Where(s => s.VatNumber == options.VatNumber); }
+
+            if (!(options.CreateFrom == default(DateTime)))
+            {  res = res.Where(s => s.Created >= options.CreateFrom); }
+
+            if (!(options.CreatedTo == default(DateTime)))
+            { res = res.Where(s => s.Created <= options.CreatedTo); }
+
+            if (!(options.CreatedTo == default(DateTime)))
+            { res = res.Where(s => s.Created <= options.CreatedTo); }
+
+            if (!(options.CustomerId == default(int)))
+            { res = res.Where(s => s.CustomerId == options.CustomerId); }
+
+            return res.Take(500).ToList();
+        }
+
+        public static List<Product> SearchProducts(DbSet<Product> dbset, SearchProductsOptions options)
+        {
+            var res = dbset.Where(s => s == s);
+
+            if (!(options.ProductId == default(string)))
+            { res = res.Where(s => s.ProductId == options.ProductId); }
+
+            res = res.Where(s => s.Price >= options.PriceFrom); 
+
+            if (!(options.PriceTo == default(decimal)))
+            { res = res.Where(s => s.Price <= options.PriceTo); }
+
+            if (!(options.Categories == default(string)))
+            { res = res.Where(s => s.ProductCategory == options.Categories); }
+
+            return res.Take(500).ToList();
+        }
+        public static decimal AddPricestoProducts()
+        {
+            var rnd = new Random();
+            return (decimal)Math.Round(rnd.NextDouble(), 2) * 10M;
         }
     }
     
-}            /*string[] productsFromFile;//saves the lines of the csv
+}           
+/*string[] productsFromFile;//saves the lines of the csv
 
             try
             {
