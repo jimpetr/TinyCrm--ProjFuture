@@ -112,75 +112,45 @@ namespace tinycrm
             var customerlist = tinycrmdbcontext.Set<Customer>();
             var productlist = tinycrmdbcontext.Set<Product>();
 
-            var searchcustomeroptions = new SearchCustomerOptions()
-            {
-                FirstName="Xaris"
-            };
+        }
 
-            Console.WriteLine(searchcustomeroptions.CreatedTo == default(DateTime));//True
-
-            var list=SearchCustomers(customerlist, searchcustomeroptions);
-            foreach (var i in list)
+        public static IQueryable<Customer> SearchCustomers(
+            SearchCustomerOptions options, TinyCrmDbContext dbContext)
+        {
+            if (options == null)
             {
-                Console.WriteLine(i.LastName);
+                return null;
             }
 
-            var searchproductoptions = new SearchProductsOptions()
-            { 
-                PriceTo=8
-            };
-            var list1 = SearchProducts(productlist, searchproductoptions);
-            foreach (var i in list1)
+            var query = dbContext
+                .Set<Customer>()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(options.Firstname))
             {
-                Console.WriteLine(i.Price);
+                query = query.Where(c => c.FirstName == options.Firstname);
             }
+
+            if (!string.IsNullOrWhiteSpace(options.VatNumber))
+            {
+                query = query.Where(c => c.VatNumber == options.VatNumber);
+            }
+
+            if (options.CustomerId != null)
+            {
+                query = query.Where(c => c.CustomerId == options.CustomerId.Value);
+            }
+
+            if (options.CreateFrom != null)
+            {
+                query = query.Where(c => c.Created >= options.CreateFrom);
+            }
+
+            query = query.Take(500);
+
+            return query;
         }
 
-        public static List<Customer> SearchCustomers(DbSet<Customer> dbset,SearchCustomerOptions options)
-        {
-            var res = dbset.Where(s=>s==s);
-
-            if (!(options.FirstName == default(string)))
-            {  res = res.Where(s => s.FirstName == options.FirstName); }
-
-            if (!(options.LastName == default(string)))
-            {  res = res.Where(s => s.LastName == options.LastName); }
-
-            if (!(options.VatNumber == default(string)))
-            {  res = res.Where(s => s.VatNumber == options.VatNumber); }
-
-            if (!(options.CreateFrom == default(DateTime)))
-            {  res = res.Where(s => s.Created >= options.CreateFrom); }
-
-            if (!(options.CreatedTo == default(DateTime)))
-            { res = res.Where(s => s.Created <= options.CreatedTo); }
-
-            if (!(options.CreatedTo == default(DateTime)))
-            { res = res.Where(s => s.Created <= options.CreatedTo); }
-
-            if (!(options.CustomerId == default(int)))
-            { res = res.Where(s => s.CustomerId == options.CustomerId); }
-
-            return res.Take(500).ToList();
-        }
-
-        public static List<Product> SearchProducts(DbSet<Product> dbset, SearchProductsOptions options)
-        {
-            var res = dbset.Where(s => s == s);
-
-            if (!(options.ProductId == default(string)))
-            { res = res.Where(s => s.ProductId == options.ProductId); }
-
-            res = res.Where(s => s.Price >= options.PriceFrom); 
-
-            if (!(options.PriceTo == default(decimal)))
-            { res = res.Where(s => s.Price <= options.PriceTo); }
-
-            if (!(options.Categories == default(string)))
-            { res = res.Where(s => s.ProductCategory == options.Categories); }
-
-            return res.Take(500).ToList();
-        }
         public static decimal AddPricestoProducts()
         {
             var rnd = new Random();
