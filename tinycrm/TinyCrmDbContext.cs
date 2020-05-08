@@ -30,6 +30,18 @@ namespace tinycrm
             modelBuilder
                 .Entity<Product>()
                 .ToTable("Product");
+
+            modelBuilder
+                .Entity<Order>()
+                .ToTable("Order");
+
+            modelBuilder
+                .Entity<OrderProduct>()
+                .ToTable("OrderProduct");
+
+            modelBuilder
+                .Entity<OrderProduct>()
+                .HasKey(op => new { op.ProductId, op.OrderId });
         }
     }
 }

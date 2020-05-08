@@ -70,11 +70,11 @@ namespace tinycrm
                 }
             }
 
-            foreach(var p in TotalProducts)
-            {
-                Console.WriteLine($"Id: {p.ProductId} ,Name: {p.Name} ,Price: {p.Price}");
+            //foreach(var p in TotalProducts)
+            //{
+             //   Console.WriteLine($"Id: {p.ProductId} ,Name: {p.Name} ,Price: {p.Price}");
                 //tinycrmdbcontext.Add(p);
-            }
+            //}
             //tinycrmdbcontext.SaveChanges();
 
             //var customer = new Customer()
