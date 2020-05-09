@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,60 +16,60 @@ namespace tinycrm
         {
             var tinycrmdbcontext = new TinyCrmDbContext();
 
-            string[] productsFromFile;//saves the lines of the csv
-            try
-            {
-                productsFromFile = File.ReadAllLines("products.txt");
-            }
-            catch (Exception)
-            {
-                return;
-            }
+            //string[] productsFromFile;//saves the lines of the csv
+            //try
+           // {
+          //      productsFromFile = File.ReadAllLines("products.txt");
+          //  }
+         //   catch (Exception)
+            //{
+             //   return;
+            //}
 
-            if (productsFromFile.Length == 0)
-            {
-                return;
-            }
+            //if (productsFromFile.Length == 0)
+            //{
+            //    return;
+            //}
 
-            var productsArray = new Product[productsFromFile.Length];
-            var TotalProducts = new List<Product>();
+            //var productsArray = new Product[productsFromFile.Length];
+            //var TotalProducts = new List<Product>();
 
-            for (var i = 0; i < productsFromFile.Length; i++)
-            {
-                var isDuplicate = false;
-                var values = productsFromFile[i].Split(';');
+//            for (var i = 0; i < productsFromFile.Length; i++)
+  //          {
+    //            var isDuplicate = false;
+      //          var values = productsFromFile[i].Split(';');
 
-                foreach (var p in productsArray)
-                {
-                    if (p != null && p.ProductId.Equals(values[0]))
-                    {
-                        isDuplicate = true;
-                    }
-                }
+        //        foreach (var p in productsArray)
+          //      {
+            //        if (p != null && p.ProductId.Equals(values[0]))
+              //      {
+                //        isDuplicate = true;
+                //    }
+                //}
 
-                if (!isDuplicate)
-                {
-                    var product = new Product()
-                    {
-                        ProductId = values[0],
-                        Name = values[1],
-                        Description = values[2],
-                        Price = AddPricestoProducts()
-                    };
+//                if (!isDuplicate)
+  //              {
+    //                var product = new Product()
+      //              {
+        //                ProductId = values[0],
+          //              Name = values[1],
+            //            Description = values[2],
+              //          Price = AddPricestoProducts()
+                //    };
 
-                    productsArray[i] = product;
+                  //  productsArray[i] = product;
 
-                }
-            }
+       //         }
+        //    }
 
-            foreach (var p in productsArray)
-            {
-                if (p != null)
-                {
+          //  foreach (var p in productsArray)
+            //{
+              //  if (p != null)
+                //{
                     //Console.WriteLine($"{p.ProductId} {p.Name} {p.Price}");  
-                    TotalProducts.Add(p);
-                }
-            }
+                 //   TotalProducts.Add(p);
+              //  }
+            //}
 
             //foreach(var p in TotalProducts)
             //{
@@ -110,7 +111,39 @@ namespace tinycrm
             //tinycrmdbcontext.SaveChanges();
 
             var customerlist = tinycrmdbcontext.Set<Customer>();
-            var productlist = tinycrmdbcontext.Set<Product>();
+            var productlist = tinycrmdbcontext.Set<Product>().ToList();
+
+            var order = new Order()
+            {
+               //DeliveryAddress = "Athina TK 15343"
+             };
+
+            var product_one = productlist[15];
+            //Console.WriteLine($"ProductId: {product_one.ProductId} Price :{product_one.Price}");
+
+            order.OrderProducts.Add(new OrderProduct() { Product = product_one });
+
+            //var customerWithOrders = new Customer()
+            //{
+            //             FirstName = "Dimitris",
+            //            LastName = "Tzempentzis",
+            //             Email = "dtzempentzis@mail.com"
+            //};
+
+            //customerWithOrders.Orders.Add(order);
+
+            // tinycrmdbcontext.Add(customerWithOrders);
+            //tinycrmdbcontext.SaveChanges();
+            var temp = customerlist.Where(x => x.LastName.Equals("Tzempentzis")).Include(t => t.Orders).ToList();
+            var Cust = customerlist.Where(x => x.LastName.Equals("Tzempentzis")).SingleOrDefault();
+            Cust.Orders.Add(order);
+            tinycrmdbcontext.Add(order);
+            tinycrmdbcontext.SaveChanges();
+
+            foreach (var i in temp )
+            {
+                Console.WriteLine(i.Email);
+            }
 
         }
 
