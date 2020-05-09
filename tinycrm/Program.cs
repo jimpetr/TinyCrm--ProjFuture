@@ -140,55 +140,20 @@ namespace tinycrm
             tinycrmdbcontext.Add(order);
             tinycrmdbcontext.SaveChanges();
 
-            foreach (var i in temp )
+            using(var context=new TinyCrmDbContext())
             {
-                Console.WriteLine(i.Email);
-            }
+                ICustomerService customerservice = new DummyCustomerService();
 
+                var results = customerservice.SearchCustomers(
+                    new SearchCustomerOptions()
+                    {
+                        CustomerId = 3
+                    }).SingleOrDefault();
+            }
         }
 
-        public static IQueryable<Customer> SearchCustomers(
-            SearchCustomerOptions options, TinyCrmDbContext dbContext)
-        {
-            if (options == null)
-            {
-                return null;
-            }
 
-            var query = dbContext
-                .Set<Customer>()
-                .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(options.Firstname))
-            {
-                query = query.Where(c => c.FirstName == options.Firstname);
-            }
-
-            if (!string.IsNullOrWhiteSpace(options.VatNumber))
-            {
-                query = query.Where(c => c.VatNumber == options.VatNumber);
-            }
-
-            if (options.CustomerId != null)
-            {
-                query = query.Where(c => c.CustomerId == options.CustomerId.Value);
-            }
-
-            if (options.CreateFrom != null)
-            {
-                query = query.Where(c => c.Created >= options.CreateFrom);
-            }
-
-            query = query.Take(500);
-
-            return query;
-        }
-
-        public static decimal AddPricestoProducts()
-        {
-            var rnd = new Random();
-            return (decimal)Math.Round(rnd.NextDouble(), 2) * 10M;
-        }
     }
     
 }           
