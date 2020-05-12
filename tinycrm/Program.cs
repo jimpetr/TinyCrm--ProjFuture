@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Update;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -134,22 +135,19 @@ namespace tinycrm
 
             // tinycrmdbcontext.Add(customerWithOrders);
             //tinycrmdbcontext.SaveChanges();
-            var temp = customerlist.Where(x => x.LastName.Equals("Tzempentzis")).Include(t => t.Orders).ToList();
-            var Cust = customerlist.Where(x => x.LastName.Equals("Tzempentzis")).SingleOrDefault();
-            Cust.Orders.Add(order);
-            tinycrmdbcontext.Add(order);
-            tinycrmdbcontext.SaveChanges();
+            //var temp = customerlist.Where(x => x.LastName.Equals("Tzempentzis")).Include(t => t.Orders).ToList();
+            //var Cust = customerlist.Where(x => x.LastName.Equals("Tzempentzis")).SingleOrDefault();
+            //Cust.Orders.Add(order);
+            //tinycrmdbcontext.Add(order);
+            //tinycrmdbcontext.SaveChanges();
 
-            using(var context=new TinyCrmDbContext())
-            {
-                ICustomerService customerservice = new DummyCustomerService();
+            
 
-                var results = customerservice.SearchCustomers(
-                    new SearchCustomerOptions()
-                    {
-                        CustomerId = 3
-                    }).SingleOrDefault();
-            }
+            
+            //var orderOptions = new CreateOrderOptions();
+            //orderOptions.CustomerId = 5;
+            //orderOptions.ProductsIds.Add("sdkdks");
+            //orderOptions.ProductsIds.Add("15678");
         }
 
 
