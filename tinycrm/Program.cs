@@ -7,6 +7,9 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using tinycrm.core.Interfaces;
+using tinycrm.core.service;
+using tinycrm.core.services.Options;
 
 namespace tinycrm
 {
@@ -16,142 +19,154 @@ namespace tinycrm
         static void Main(string[] args)
         {
             var tinycrmdbcontext = new TinyCrmDbContext();
+            using (var context = new TinyCrmDbContext())
+            {
+                ICustomerService customerService = new CustomerService(
+                    context);
 
-            //string[] productsFromFile;//saves the lines of the csv
-            //try
-           // {
-          //      productsFromFile = File.ReadAllLines("products.txt");
-          //  }
-         //   catch (Exception)
-            //{
-             //   return;
-            //}
+                var customer = customerService.CreateCustomer(
+                    new CreateCustomerOptions()
+                    {
+                        Firstname = "Christos",
+                        Lastname = "Pnevmatikos",
+                        Vatnumber = "123456798"
+                    });
 
-            //if (productsFromFile.Length == 0)
-            //{
-            //    return;
-            //}
+                //string[] productsFromFile;//saves the lines of the csv
+                //try
+                // {
+                //      productsFromFile = File.ReadAllLines("products.txt");
+                //  }
+                //   catch (Exception)
+                //{
+                //   return;
+                //}
 
-            //var productsArray = new Product[productsFromFile.Length];
-            //var TotalProducts = new List<Product>();
+                //if (productsFromFile.Length == 0)
+                //{
+                //    return;
+                //}
 
-//            for (var i = 0; i < productsFromFile.Length; i++)
-  //          {
-    //            var isDuplicate = false;
-      //          var values = productsFromFile[i].Split(';');
+                //var productsArray = new Product[productsFromFile.Length];
+                //var TotalProducts = new List<Product>();
 
-        //        foreach (var p in productsArray)
-          //      {
-            //        if (p != null && p.ProductId.Equals(values[0]))
-              //      {
+                //            for (var i = 0; i < productsFromFile.Length; i++)
+                //          {
+                //            var isDuplicate = false;
+                //          var values = productsFromFile[i].Split(';');
+
+                //        foreach (var p in productsArray)
+                //      {
+                //        if (p != null && p.ProductId.Equals(values[0]))
+                //      {
                 //        isDuplicate = true;
                 //    }
                 //}
 
-//                if (!isDuplicate)
-  //              {
-    //                var product = new Product()
-      //              {
-        //                ProductId = values[0],
-          //              Name = values[1],
-            //            Description = values[2],
-              //          Price = AddPricestoProducts()
+                //                if (!isDuplicate)
+                //              {
+                //                var product = new Product()
+                //              {
+                //                ProductId = values[0],
+                //              Name = values[1],
+                //            Description = values[2],
+                //          Price = AddPricestoProducts()
                 //    };
 
-                  //  productsArray[i] = product;
+                //  productsArray[i] = product;
 
-       //         }
-        //    }
+                //         }
+                //    }
 
-          //  foreach (var p in productsArray)
-            //{
-              //  if (p != null)
+                //  foreach (var p in productsArray)
                 //{
-                    //Console.WriteLine($"{p.ProductId} {p.Name} {p.Price}");  
-                 //   TotalProducts.Add(p);
-              //  }
-            //}
+                //  if (p != null)
+                //{
+                //Console.WriteLine($"{p.ProductId} {p.Name} {p.Price}");  
+                //   TotalProducts.Add(p);
+                //  }
+                //}
 
-            //foreach(var p in TotalProducts)
-            //{
-             //   Console.WriteLine($"Id: {p.ProductId} ,Name: {p.Name} ,Price: {p.Price}");
+                //foreach(var p in TotalProducts)
+                //{
+                //   Console.WriteLine($"Id: {p.ProductId} ,Name: {p.Name} ,Price: {p.Price}");
                 //tinycrmdbcontext.Add(p);
-            //}
-            //tinycrmdbcontext.SaveChanges();
+                //}
+                //tinycrmdbcontext.SaveChanges();
 
-            //var customer = new Customer()
-            //{
-            //    FirstName = "Geroge",
-            //    LastName = "Oikonomou",
-            //    Email = "goikonomou@gmail.com",
-            //    Created = DateTime.Now
+                //var customer = new Customer()
+                //{
+                //    FirstName = "Geroge",
+                //    LastName = "Oikonomou",
+                //    Email = "goikonomou@gmail.com",
+                //    Created = DateTime.Now
 
-            //};
+                //};
 
-            //tinycrmdbcontext.Add(customer);
+                //tinycrmdbcontext.Add(customer);
 
-            //var customer1 = new Customer()
-            //{
-            //    FirstName = "Xaris",
-            //    LastName = "Mpouras",
-            //    Email = "mpouras.gr",
-            //    Created = DateTime.Now
-            //};
+                //var customer1 = new Customer()
+                //{
+                //    FirstName = "Xaris",
+                //    LastName = "Mpouras",
+                //    Email = "mpouras.gr",
+                //    Created = DateTime.Now
+                //};
 
-            //tinycrmdbcontext.Add(customer1);
+                //tinycrmdbcontext.Add(customer1);
 
-            //var petrogiannos = new Customer()
-            //{
-            //    FirstName = "Dimitris",
-            //    LastName = "Petrogiannos",
-            //    Email = "petrogiannos.gr",
-            //    Created = DateTime.Now
-            //};
+                //var petrogiannos = new Customer()
+                //{
+                //    FirstName = "Dimitris",
+                //    LastName = "Petrogiannos",
+                //    Email = "petrogiannos.gr",
+                //    Created = DateTime.Now
+                //};
 
-            //tinycrmdbcontext.Add(petrogiannos);
-            //tinycrmdbcontext.SaveChanges();
+                //tinycrmdbcontext.Add(petrogiannos);
+                //tinycrmdbcontext.SaveChanges();
 
-            var customerlist = tinycrmdbcontext.Set<Customer>();
-            var productlist = tinycrmdbcontext.Set<Product>().ToList();
+                //var customerlist = tinycrmdbcontext.Set<Customer>();
+                //var productlist = tinycrmdbcontext.Set<Product>().ToList();
 
-            var order = new Order()
-            {
-               //DeliveryAddress = "Athina TK 15343"
-             };
+                //var order = new Order()
+                //{
+                //DeliveryAddress = "Athina TK 15343"
+                //};
 
-            var product_one = productlist[15];
-            //Console.WriteLine($"ProductId: {product_one.ProductId} Price :{product_one.Price}");
+                //var product_one = productlist[15];
+                //Console.WriteLine($"ProductId: {product_one.ProductId} Price :{product_one.Price}");
 
-            order.OrderProducts.Add(new OrderProduct() { Product = product_one });
+                //order.OrderProducts.Add(new OrderProduct() { Product = product_one });
 
-            //var customerWithOrders = new Customer()
-            //{
-            //             FirstName = "Dimitris",
-            //            LastName = "Tzempentzis",
-            //             Email = "dtzempentzis@mail.com"
-            //};
+                //var customerWithOrders = new Customer()
+                //{
+                //             FirstName = "Dimitris",
+                //            LastName = "Tzempentzis",
+                //             Email = "dtzempentzis@mail.com"
+                //};
 
-            //customerWithOrders.Orders.Add(order);
+                //customerWithOrders.Orders.Add(order);
 
-            // tinycrmdbcontext.Add(customerWithOrders);
-            //tinycrmdbcontext.SaveChanges();
-            //var temp = customerlist.Where(x => x.LastName.Equals("Tzempentzis")).Include(t => t.Orders).ToList();
-            //var Cust = customerlist.Where(x => x.LastName.Equals("Tzempentzis")).SingleOrDefault();
-            //Cust.Orders.Add(order);
-            //tinycrmdbcontext.Add(order);
-            //tinycrmdbcontext.SaveChanges();
+                // tinycrmdbcontext.Add(customerWithOrders);
+                //tinycrmdbcontext.SaveChanges();
+                //var temp = customerlist.Where(x => x.LastName.Equals("Tzempentzis")).Include(t => t.Orders).ToList();
+                //var Cust = customerlist.Where(x => x.LastName.Equals("Tzempentzis")).SingleOrDefault();
+                //Cust.Orders.Add(order);
+                //tinycrmdbcontext.Add(order);
+                //tinycrmdbcontext.SaveChanges();
 
-            
 
-            
-            //var orderOptions = new CreateOrderOptions();
-            //orderOptions.CustomerId = 5;
-            //orderOptions.ProductsIds.Add("sdkdks");
-            //orderOptions.ProductsIds.Add("15678");
+
+
+                //var orderOptions = new CreateOrderOptions();
+                //orderOptions.CustomerId = 5;
+                //orderOptions.ProductsIds.Add("sdkdks");
+                //orderOptions.ProductsIds.Add("15678");
+            }
+
+
         }
-
-
-
     }
     
 }           
